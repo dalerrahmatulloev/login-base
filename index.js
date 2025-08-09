@@ -10,7 +10,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-const SECRET_KEY = 'my-super-secret'; // Лучше хранить в .env
+const SECRET_KEY = process.env.SECRET_KEY;
 
 const db = new sqlite3.Database('./database.db');
 
