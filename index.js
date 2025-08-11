@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
@@ -10,7 +11,13 @@ const app = express();
 app.use(bodyParser.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-const SECRET_KEY = process.env.SECRET_KEY;
+const SECRET_KEY = process.env.SECRET_KEY || "dev-secret-key";
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Сервер запущен: http://localhost:${PORT}`);
+  console.log(`Swagger: http://localhost:${PORT}/api-docs`);
+});
 
 const db = new sqlite3.Database('./database.db');
 
@@ -146,9 +153,4 @@ app.delete('/todos/:id', authenticateToken, (req, res) => {
       if (this.changes === 0) return res.status(404).json({ error: 'Задача не найдена' });
       res.json({ message: 'Задача удалена' });
     });
-});
-
-app.listen(3000, () => {
-  console.log('Сервер запущен: http://localhost:3000');
-  console.log('Swagger: http://localhost:3000/api-docs');
 });
