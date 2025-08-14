@@ -1,14 +1,22 @@
 require('dotenv').config();
 const express = require('express');
-const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const sqlite3 = require('sqlite3').verbose();
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
 
 const app = express();
-app.use(bodyParser.json());
+app.use(cors({
+  if (err) return res.status(500).json({ error: 'Ошибка базы данных' });
+  if (!user) return res.status(400).json({ error: 'Неверный логин' });
+  origin: "http://localhost:5173", // можно '*' для разрешения всем, но это менее безопасно
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+}));
+
+app.use(express.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const SECRET_KEY = process.env.SECRET_KEY || "dev-secret-key";
