@@ -9,8 +9,6 @@ const cors = require('cors');
 
 const app = express();
 app.use(cors({
-  if (err) return res.status(500).json({ error: 'Ошибка базы данных' });
-  if (!user) return res.status(400).json({ error: 'Неверный логин' });
   origin: "http://localhost:5173", // можно '*' для разрешения всем, но это менее безопасно
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
